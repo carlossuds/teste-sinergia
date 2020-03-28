@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import User from '../schemas/User';
@@ -20,7 +21,7 @@ class SessionController {
 
     return res.json({
       user,
-      token: jwt.sign({ username: user.username }, authConfig.secret, {
+      token: jwt.sign({ _id: user._id }, authConfig.secret, {
         expiresIn: authConfig.expiresIn,
       }),
     });

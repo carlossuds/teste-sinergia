@@ -43,7 +43,7 @@ class UserController {
     }
     const { oldPassword } = req.body;
 
-    const user = await User.findById(req.params._id);
+    const user = await User.findById(req.userId);
 
     if (oldPassword && !(await bcrypt.compare(oldPassword, user.password))) {
       res.status(400).json({ error: 'Wrong password' });
@@ -59,11 +59,12 @@ class UserController {
 
   async index(req, res) {
     const users = await User.find();
+
     return res.json(users);
   }
 
   async destroy(req, res) {
-    const user = await User.findById(req.params._id);
+    const user = await User.findById(req.userId);
 
     await user.remove();
 

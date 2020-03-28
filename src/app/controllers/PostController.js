@@ -10,13 +10,13 @@ class PostController {
       author_id: Yup.string().required(),
     });
 
-    if (!(await schema.isValid({ ...req.body, ...req.params }))) {
+    if (!(await schema.isValid({ ...req.body, author_id: req.userId }))) {
       return res.status(400).json('Posts cannot be empty. Write something.');
     }
 
     const post = await Post.create({
       text: req.body.text,
-      author_id: req.params.author_id,
+      author_id: req.userId,
     });
 
     return res.json(post);
@@ -62,6 +62,8 @@ class PostController {
     const post = await Post.findById(req.params._id);
 
     if (!post) return res.status(400).json('No post found.');
+    if (post.author_id !== req.userId)
+      return res.status(401).json('Non authorized');
 
     await post.remove();
 

@@ -6,6 +6,14 @@ const CommentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    author_id: {
+      type: String,
+      required: true,
+    },
+    post_id: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
