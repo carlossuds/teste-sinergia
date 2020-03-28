@@ -60,5 +60,13 @@ class UserController {
     const users = await User.find();
     return res.json(users);
   }
+
+  async destroy(req, res) {
+    const user = await User.findOne({ username: req.params.username });
+
+    await user.remove();
+
+    return res.json({ msg: `User ${user.username} was deleted!` });
+  }
 }
 export default new UserController();
