@@ -42,9 +42,7 @@ class UserController {
     }
     const { oldPassword } = req.body;
 
-    const user = await User.findOne({ username: req.params.username }).select(
-      '+password'
-    );
+    const user = await User.findOne({ username: req.params.username });
 
     if (oldPassword && !(await bcrypt.compare(oldPassword, user.password))) {
       res.status(400).json({ error: 'Wrong password' });

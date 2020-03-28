@@ -8,7 +8,7 @@ class SessionController {
   async store(req, res) {
     const { username, password } = req.body;
 
-    const user = await User.findOne({ username }).select('+password');
+    const user = await User.findOne({ username });
 
     if (!user) {
       return res.status(401).json({ error: 'User not found' });
