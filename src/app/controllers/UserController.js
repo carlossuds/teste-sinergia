@@ -49,6 +49,8 @@ class UserController {
       res.status(400).json({ error: 'Wrong password' });
     }
 
+    if (user._id !== req.userId) return res.status(401).json('Non authorized');
+
     await user.updateOne({
       ...req.body,
       password: await bcrypt.hash(req.body.password, 8),
@@ -65,6 +67,8 @@ class UserController {
 
   async destroy(req, res) {
     const user = await User.findById(req.userId);
+
+    if (user._id !== req.userId) return res.status(401).json('Non authorized');
 
     await user.remove();
 

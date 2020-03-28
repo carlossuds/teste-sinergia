@@ -51,6 +51,9 @@ class PostController {
 
     const post = await Post.findById(req.params._id);
 
+    if (post.author_id !== req.userId)
+      return res.status(401).json('Non authorized');
+
     await post.updateOne({
       text: req.body.text,
     });
