@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import * as Yup from 'yup';
 import bcrypt from 'bcryptjs';
 import User from '../schemas/User';
@@ -42,7 +43,7 @@ class UserController {
     }
     const { oldPassword } = req.body;
 
-    const user = await User.findOne({ username: req.params.username });
+    const user = await User.findById(req.params._id);
 
     if (oldPassword && !(await bcrypt.compare(oldPassword, user.password))) {
       res.status(400).json({ error: 'Wrong password' });
@@ -53,7 +54,7 @@ class UserController {
       password: await bcrypt.hash(req.body.password, 8),
     });
 
-    return res.json(user);
+    return res.json(`${user.username}'s profile updated!`);
   }
 
   async index(req, res) {
@@ -62,7 +63,7 @@ class UserController {
   }
 
   async destroy(req, res) {
-    const user = await User.findOne({ username: req.params.username });
+    const user = await User.findById(req.params._id);
 
     await user.remove();
 

@@ -1,12 +1,13 @@
 /* eslint-disable no-underscore-dangle */
 import * as Yup from 'yup';
 import Post from '../schemas/Post';
+import User from '../schemas/User';
 
 class PostController {
   async store(req, res) {
     const schema = Yup.object().shape({
       text: Yup.string().required(),
-      author: Yup.string().required(),
+      author_id: Yup.string().required(),
     });
 
     if (!(await schema.isValid({ ...req.body, ...req.params }))) {
@@ -15,7 +16,7 @@ class PostController {
 
     const post = await Post.create({
       text: req.body.text,
-      author: req.params.author,
+      author_id: req.params.author_id,
     });
 
     return res.json(post);
@@ -30,7 +31,9 @@ class PostController {
   }
 
   async show(req, res) {
-    const posts = await Post.find({ author: req.params.author }).sort({
+    const user = await User.findOne({ username: req.params.author });
+
+    const posts = await Post.find({ author_id: user._id }).sort({
       createdAt: -1,
     });
 
@@ -57,6 +60,8 @@ class PostController {
 
   async destroy(req, res) {
     const post = await Post.findById(req.params._id);
+
+    if (!post) return res.status(400).json('No post found.');
 
     await post.remove();
 
