@@ -28,15 +28,11 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-UserSchema.pre('save', async (next) => {
+UserSchema.pre('save', async function save(next) {
   const passwordHash = await bcrypt.hash(this.password, 8);
   this.password = passwordHash;
 
   next();
-});
-
-UserSchema.method('checkPassword', (password) => {
-  return bcrypt.compare(password, this.password_hash);
 });
 
 export default mongoose.model('User', UserSchema);

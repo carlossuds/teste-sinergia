@@ -7,11 +7,12 @@ class Database {
 
   mongo() {
     this.mongoConnection = mongoose.connect(
-      'mongodb+srv://admin:admin0000@cluster0-j1jf9.mongodb.net/test',
+      'mongodb://localhost:27017/sudsdb',
       {
         useNewUrlParser: true,
         useFindAndModify: true,
         useUnifiedTopology: true,
+        useCreateIndex: true,
       }
     );
   }
